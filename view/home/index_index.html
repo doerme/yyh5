@@ -1,0 +1,25 @@
+<%include ../partials/head.html%>
+<div class="container">
+    <h2>案例模板</h2>
+    <div class="row">
+        <%
+        templateList.forEach(function(it){
+        it.text = JSON.parse(it.text);
+        %>
+        <div class="col-md-4">
+            <div class="thumbnail">
+                <img src="<%=it.cover%>" style="height:320px; width:320px;">
+
+                <div class="caption">
+                    <h3><%=it.text.name%></h3>
+
+                    <p>
+                        <a href="/build?tid=<%=it.id%>.html" class="btn btn-primary js-sign-in">以此为模板编辑</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <%})%>
+    </div>
+</div>
+<%include ../partials/foot.html%>
