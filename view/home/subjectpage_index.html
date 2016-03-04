@@ -3,23 +3,31 @@
     <div class="clearfix">
         <div class="pull-left">
             <div class="form-group">
-                <a class="btn btn-primary" id="js_new_app" href="javascript:;" ><span class="glyphicon glyphicon-plus"></span>新建应用</a>
+                <a class="btn btn-primary" id="js_new_app" href="javascript:;"><span
+                        class="glyphicon glyphicon-plus"></span>新建应用</a>
             </div>
         </div>
         <div class="form-group pull-right j_search_box" style="width:400px">
             <div class="input-group">
-                <input type="text" class="form-control search-txt" placeholder="输入关键字搜索"><span class="input-group-btn"><button class="btn btn-primary search-btn" type="button">搜索</button></span>
+                <input type="text" class="form-control search-txt" placeholder="输入关键字搜索"><span class="input-group-btn"><button
+                    class="btn btn-primary search-btn" type="button">搜索
+            </button></span>
             </div>
-        </div>		</div>
+        </div>
+    </div>
     <table class="table table-striped table-hover table-bordered j_tbl_sort">
         <thead>
         <tr>
             <th data-sort="app_name">应用名字<span class="glyphicon glyphicon-j glyphicon-sort"></span></th>
             <th data-sort="author" style="width:100px">作者<span class="glyphicon glyphicon-j glyphicon-sort"></span></th>
-            <th data-sort="create_time" style="width:150px">创建时间<span class="glyphicon glyphicon-j glyphicon-sort"></span></th>
-            <th data-sort="last_updated" style="width:150px">更新时间<span class="glyphicon glyphicon-j glyphicon-sort"></span></th>
-            <th data-sort="publish_path" style="width:100px">线上地址<span class="glyphicon glyphicon-j glyphicon-sort"></span></th>
-            <th data-sort="publish_status" style="width:100px">上线状态<span class="glyphicon glyphicon-j glyphicon-sort"></span></th>
+            <th data-sort="create_time" style="width:150px">创建时间<span
+                    class="glyphicon glyphicon-j glyphicon-sort"></span></th>
+            <th data-sort="last_updated" style="width:150px">更新时间<span
+                    class="glyphicon glyphicon-j glyphicon-sort"></span></th>
+            <th data-sort="publish_path" style="width:100px">线上地址<span
+                    class="glyphicon glyphicon-j glyphicon-sort"></span></th>
+            <th data-sort="publish_status" style="width:100px">上线状态<span
+                    class="glyphicon glyphicon-j glyphicon-sort"></span></th>
             <th style="width: 260px; cursor: default;">操作</th>
         </tr>
         </thead>
@@ -28,7 +36,8 @@
         <tr data-id="<%=it.subject_id%> ">
             <td style="word-break:break-all"><%=it.name%></td>
             <td><%=it.user_id%></td>
-            <td><%=it.createTime||""%></td> <td><%=it.updateTime||""%></td>
+            <td><%=it.createTime||""%></td>
+            <td><%=it.updateTime||""%></td>
             <td>
                 <% if(it.status==2){ %>
                 <a target="_blank" href="/resource/tmphtml/file<%=it.subject_id%>.html">静态地址</a>
@@ -45,11 +54,16 @@
                 <div>
                     <a href="/build?id=<%=it.subject_id%>" class="btn btn-default btn-xs">
                         <span class="glyphicon glyphicon-edit"></span> 修改</a>
-                    <a href="javascript:;" onclick="return deleteSubject('<%=it.subject_id%>');" class="btn btn-danger btn-xs j_delete"><span class="glyphicon glyphicon-trash"></span> 删除</a>
+                    <a href="javascript:;" onclick="return deleteSubject('<%=it.subject_id%>');"
+                       class="btn btn-danger btn-xs j_delete"><span class="glyphicon glyphicon-trash"></span> 删除</a>
                     <% if(it.status==1){ %>
-                    <a href="javascript:;" onclick="return outPutFile('<%=it.subject_id%>')" class="btn btn-default btn-xs j_publish"><span class="glyphicon glyphicon-cloud-upload"></span> 上线</a>
+                    <a href="javascript:;" onclick="return outPutFile('<%=it.subject_id%>')"
+                       class="btn btn-default btn-xs j_publish"><span class="glyphicon glyphicon-cloud-upload"></span>
+                        上线</a>
                     <% }else if(it.status==2){ %>
-                    <a href="javascript:;" onclick="return unpublishSubject('<%=it.subject_id%>')" class="btn btn-danger btn-xs j_publish_down"><span class="glyphicon glyphicon-cloud-download"></span> 下线</a>
+                    <a href="javascript:;" onclick="return unpublishSubject('<%=it.subject_id%>')"
+                       class="btn btn-danger btn-xs j_publish_down"><span
+                            class="glyphicon glyphicon-cloud-download"></span> 下线</a>
                     <% } %>
                 </div>
             </td>
@@ -63,4 +77,17 @@
         </ul>
     </div>
 </div>
+<script src="http://s1.yy.com/common/js/seajs/sea.js"></script>
+<script type="text/javascript" src="/static/js/jquery.min.js"></script>
+<script type="text/javascript" src="/static/js/lib/control.js"></script>
+<script type="text/javascript" src="/static/js/lib/dialog-min.js"></script>
+<script type="text/javascript">
+    var config = seajs.config({
+        base: "./static/js",
+        map: [
+            [/^(.*\.(?:js))(.*)$/i, '$1?ver=20150519100400']
+        ]
+    })
+    seajs.use(["manager"]);
+</script>
 <%include ../partials/foot.html%>

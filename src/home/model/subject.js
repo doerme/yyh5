@@ -4,7 +4,7 @@
  */
 export default class extends think.model.base {
     getSubjectList(userId, currentPage) {
-        return this.getSubjectListByPage(userId, currentPage, 10);
+        return this.getSubjectListByPage(userId, currentPage, 30);
     }
 
     getSubjectListByPage(userId, currentPage, everyPage) {

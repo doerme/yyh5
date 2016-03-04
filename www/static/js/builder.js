@@ -659,7 +659,6 @@ $(document).ready(function () {
             //导入数据
             $('#j_import_data').on("click",function(){
                 saveSubject(2);
-
             });
 
         };
