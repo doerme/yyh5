@@ -14,4 +14,8 @@ export default class extends think.model.base {
     getSubjectPersonal(user_id, subject_id) {
         return this.where({'user_id': user_id, 'subject_id': subject_id}).select();
     }
+
+    getSubjectById(subject_id) {
+        return this.where({'subject_id': subject_id}).select();
+    }
 }

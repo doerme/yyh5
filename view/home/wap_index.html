@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="zh-cn" class="no-js">
+<head>
+    <meta http-equiv="Content-Type">
+    <meta content="text/html; charset=utf-8">
+    <meta charset="utf-8">
+    <title><%=data.subjectList.name%></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="format-detection" content="email=no">
+    <link rel="stylesheet" type="text/css" href="<%=data.httphost%>/static/css/wap/reset.css?v=2" />
+    <link rel="stylesheet" type="text/css" href="<%=data.httphost%>/static/css/animate.css">
+    <link rel="stylesheet" type="text/css" href="<%=data.httphost%>/static/css/wap/load.css?v=2" />
+    <link rel="stylesheet" type="text/css" href="<%=data.httphost%>/static/css/wap/index.css?v=2" />
+</head>
+<body>
+<div id="loading">
+    <div class="spinner">
+        <div class="double-bounce1"></div>
+        <div class="double-bounce2"></div>
+    </div>
+</div>
+<div id="content" style="display:none">
+    <!-- page -->
+    <%  var page_index=0; data.subjectList.pages.forEach(function(page_json){  page_index++; %>
+    <div class="page page-<%=page_index%>-1  <% if(page_index==1){ %> page-current <% }else{ %> hide photo-block <% } %>"
+    <%if(page_json.bgImage!=''){%> style="background:url(<%=page_json.bgImage%>) no-repeat center top; background-size:100% auto;" <%}else if(page_json.bgColor!='rgb(0, 0, 0)'){%> style="background-color: <%=page_json.bgColor%>;"  <%}else{%> style="background-color: <%=data.subjectList.bgColor%>;" <%}%> >
+    <div class="wrap">
+        <% var item_index=0; page_json.elements.forEach(function(ele){ item_index++; %>
+        <%if(ele.type=='text'){%>
+        <div class="item_txt <%=ele.animation%> animated" data-id="<%=ele.name%>" data-link="<%=ele.link%>" animation="<%=ele.animation%>"  animationiteration="<%=ele.animationIteration%>" animationduration="<%=ele.animationDuration%>" animationdelay="<%=ele.animationDelay%>" style="font-size: <%=ele.textSize%>; color: <%=ele.textColor%>;left: <%=ele.x%>px;top: <%=ele.y%>px;width:<%=ele.width%>; height:<%=ele.height%>;z-index:<%=ele.zIndex%>;-webkit-animation-duration: <%=ele.animationDuration%>ms;  -webkit-animation-iteration-count: <%=ele.animationIteration%>;-webkit-animation-delay: <%=ele.animationDelay%>ms;"><%=ele.text%></div>
+        <%} if(ele.type=='image'){%>
+        <img class="item_img <%=ele.animation%> animated" data-id="<%=ele.name%>" data-link="<%=ele.link%>" animation="<%=ele.animation%>"  animationiteration="<%=ele.animationIteration%>" animationduration="<%=ele.animationDuration%>" animationdelay="<%=ele.animationDelay%>" style="left:<%=ele.x%>px; top:<%=ele.y%>px; width:<%=ele.width%>; height:<%=ele.height%>; z-index:<%=ele.zIndex%>;-webkit-animation-duration: <%=ele.animationDuration%>ms;  -webkit-animation-iteration-count: <%=ele.animationIteration%>;-webkit-animation-delay: <%=ele.animationDelay%>ms;" src="<%=ele.image%>" />
+        <%} })%>
+    </div>
+</div>
+<%})%>
+<!-- page -->
+</div>
+<div id="audiocontainer"></div>
+<div id="textsuper">
+    <div id="textsub"><img id="fontimg" />
+    </div></div>
+<div id="share">
+    <div class="shareImg"></div>
+</div>
+<div id="bg_loading" class="hide">
+</div>
+<script type="text/javascript">
+    var httpbase = '<%=data.httphost%>';
+    var gSound = '<%=data.subjectList.bgm.url%>';
+</script>
+<script src="<%=data.httphost%>/static/js/wap/jquery-2.1.3.min.js?v=2"></script>
+<script src="<%=data.httphost%>/static/js/wap/google.fastbutton.js?v=2"></script>
+<script src="<%=data.httphost%>/static/js/wap/jquery.google.fastbutton.js?v=2"></script>
+<script src="<%=data.httphost%>/static/js/wap/zepto.min.js?v=2"></script>
+<script src="<%=data.httphost%>/static/js/wap/touch.js?v=2"></script>
+<script src="<%=data.httphost%>/static/js/wap/index.js?v=2"></script>
+<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.1.0.js"></script>
+<script type="text/javascript">
+    var goNext,goPrev;
+    var max_row='<%=page_index%>';
+    var page_width=320;
+    document.onreadystatechange = loading;
+    var loading_pc_num=0;
+    var loading_pc=setInterval(function(){
+        loading_pc_num+=parseInt(Math.random()*6);
+        $('.loading_main').html(loading_pc_num+'%');
+        if(loading_pc_num>90){
+            clearInterval(loading_pc);
+        }
+    },300);
+    function loading(){
+        if(document.readyState == "complete"){
+            loading_pc_num=94;
+            setTimeout(function(){
+                startpage();
+            },1000);
+        }
+    }
+    function startpage(){
+        adaptscreen(page_width);
+        $("#loading").hide();
+        $("#content").show();
+        playbksound();
+    }
+    function getPhotoListControl(t){
+        if(!iscanget){ return;}
+        if(t==1 && t1_page!=-1){
+            ++t1_page;
+            getPhotoList(t,t1_page);
+        }
+        if(t==2 && t2_page!=-1){
+            ++t2_page;
+            getPhotoList(t,t2_page);
+        }
+
+    }
+    $(function(){
+        /*show detail*/
+        $('.photo_main_block').delegate('.imgdetail','fastClick',function(){
+            setPost_num(function(jdata){
+
+            },{
+                'openid':LS.get('ls_openid'),
+                'id':$(this).data('id')
+            });
+
+            $('.photo_show.main .ps').attr('src',$(this).attr('src'));
+            $('.photo_show').show();
+        });
+        /*show detail end*/
+        /*share*/
+        var request_share_url = 'http://h5.yy.com/wap/getsharecf?url=' + encodeURIComponent(window.location.href.split('#')[0]);
+        $.ajax({
+            url: request_share_url,
+            dataType: "jsonp",
+        }).then(function (jdata) {
+            console.log(jdata);
+            var msg = jdata.wxapi;
+            wx.config({
+                debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+                appId: msg.appId, // 必填，公众号的唯一标识
+                timestamp: msg.timestamp, // 必填，生成签名的时间戳
+                nonceStr: msg.nonceStr, // 必填，生成签名的随机串
+                signature: msg.signature,// 必填，签名，见附录1
+                jsApiList: ['onMenuShareTimeline', 'onMenuShareAppMessage', 'onMenuShareQQ', 'chooseWXPay', 'onMenuShareWeibo', 'startRecord', 'stopRecord', 'onVoiceRecordEnd', 'playVoice', 'pauseVoice', 'stopVoice', 'onVoicePlayEnd', 'uploadVoice', 'downloadVoice', 'translateVoice'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+            });
+            wx.ready(function () {
+                var share_title = '<%=data.subjectList.weixin.title%>';
+                var share_desc = '<%=data.subjectList.weixin.desc%>';
+                var share_link = window.location.href;
+                var share_img = '<%=data.subjectList.weixin.imgUrl%>';
+                wx_config = true;
+                //分享到朋友圈
+                wx.onMenuShareTimeline({
+                    title: share_title, // 分享标题
+                    link: share_link, // 分享链接
+                    imgUrl: share_img, // 分享图标
+                    success: function () {
+
+                    },
+                    cancel: function () {
+
+                    }
+                });
+                //分享给朋友
+                wx.onMenuShareAppMessage({
+                    title: share_title, // 分享标题
+                    desc: share_desc, // 分享描述
+                    link: share_link, // 分享链接
+                    imgUrl: share_img, // 分享图标
+                    type: '', // 分享类型,music、video或link，不填默认为link
+                    dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+                    success: function () {
+
+                    },
+                    cancel: function () {
+
+                    }
+                });
+
+
+                wx.onMenuShareQQ({
+                    title: share_title, // 分享标题
+                    desc: share_desc, // 分享描述
+                    link: share_link, // 分享链接
+                    imgUrl: share_img, // 分享图标
+                    success: function () {
+
+                    },
+                    cancel: function () {
+
+                    }
+                });
+
+
+                wx.onMenuShareWeibo({
+                    title: share_title, // 分享标题
+                    desc: share_desc, // 分享描述
+                    link: share_link, // 分享链接
+                    imgUrl: share_img, // 分享图标
+                    success: function () {
+
+                    },
+                    cancel: function () {
+
+                    }
+                })
+
+            });
+        });
+        /*share end*/
+    });
+
+    function adaptscreen(widthnum){
+        var DEFAULT_WIDTH = widthnum, // 页面的默认宽度
+                ua = navigator.userAgent.toLowerCase(), // 根据 user agent 的信息获取浏览器信息
+                deviceWidth = window.screen.width, // 设备的宽度
+                devicePixelRatio = window.devicePixelRatio || 1, // 物理像素和设备独立像素的比例，默认为1
+                targetDensitydpi;    // Android4.0以下手机不支持viewport的width，需要设置target-densitydpi
+        if (ua.indexOf("android") !== -1 && parseFloat(ua.slice(ua.indexOf("android")+8)) < 4) {
+            targetDensitydpi = DEFAULT_WIDTH / deviceWidth * devicePixelRatio * 160;
+            $('meta[name="viewport"]').attr('content', 'target-densitydpi=' + targetDensitydpi + ', width=device-width, user-scalable=no');
+        }else{
+            $('meta[name="viewport"]').attr('content', 'target-densitydpi=device-dpi, width='+DEFAULT_WIDTH+'px, user-scalable=no');
+        }
+    }
+</script>
+</body>
+</html>

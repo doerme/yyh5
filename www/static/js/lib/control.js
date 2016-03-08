@@ -331,6 +331,6 @@ var setBuildPage = function (subjectId) {
     window.setBuildPageCallBack = function (jdata) {
         aceeditor_2.setValue(jdata.data.message);
     }
-    ajaxRun('/wap/getcode', data, setBuildPageCallBack);
+    ajaxRun('/wap/release', data, setBuildPageCallBack);
 
 }
